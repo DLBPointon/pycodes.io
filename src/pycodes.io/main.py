@@ -4,6 +4,8 @@ import requests
 import json
 import sys
 from Postcode import PostcodeObj
+from Doogal import DoogalObj
+from Compare import ComparisonObj
 
 
 DESCRIPTION = """
@@ -52,7 +54,9 @@ def validate_postcode(args):
 def main():
     args = parse_args()
     code = validate_postcode(args)
-    print(PostcodeObj(code, args.function))
+    postcodeio = PostcodeObj(code, args.function)
+    doogal = DoogalObj(code, args.function)
+    print(ComparisonObj(postcodeio, doogal))
 
 if __name__ == "__main__":
     main()

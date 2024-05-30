@@ -13,6 +13,7 @@ class DoogalObj:
         self.parish         = (self.code_data["parish"] if 'parish' in self.code_data else "NA")
         self.quality_rating = (self.code_data["quality"] if 'quality' in self.code_data else "NA")
         self.admin          = self.admin_codes()
+        self.constituency   = { x: y for x, y in self.code_data.items() if "parliamentary" in x}
         self.inoutcode      = { "outcode": (self.code_data["outcode"] if 'outocode' in self.code_data else "NA"), "incode": (self.code_data["incode"] if 'incode' in self.code_data else "NA")}
         self.lat_long       = { "latitude" : self.code_data["latitude"], "longitude" : self.code_data["longitude"] }
         self.east_north     = { "eastings" : self.code_data["easting"], "northings": self.code_data["northing"]}

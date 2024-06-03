@@ -13,7 +13,7 @@ class ComparisonObj:
         txt = io.StringIO()
 
         for x, y in {0: "Postcodes.io", 1: "Doogal"}.items():
-            txt.write(f"Field\t{y}\n")
+            txt.write(f"\n\nField\t{y}\n")
 
             for k, v in self.comparison.items():
                 txt.write(f'{k}\t{v[x]}\n')

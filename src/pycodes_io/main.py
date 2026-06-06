@@ -58,6 +58,11 @@ def parse_args():
         help="Base URL for postcodes.io API.",
     )
     parser.add_argument(
+        "--output",
+        type=str,
+        help="Output CSV file path.",
+    )
+    parser.add_argument(
         "--dry_run",
         action="store_true",
         help="Boolean to run in dry mode, i.e. don't write output to CSV",
@@ -103,9 +108,9 @@ def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
     return output_dict
 
 
-def output_data_to_csv(output_dict: dict):
+def output_data_to_csv(output_dict: dict, outfile: str):
 
-    with open("output.csv", "w") as f:
+    with open(outfile, "w") as f:
         f.write("postcode,latitude,longitude,area\n")
         for postcode, data in output_dict.items():
             f.write(f"{postcode},{data[0]},{data[1]},{data[2]}\n")
@@ -120,7 +125,7 @@ def main():
         )
 
         if not args.dry_run:
-            output_data_to_csv(output_dict)
+            output_data_to_csv(output_dict, args.output)
 
     if args.postcode:
         code = validate_postcode(args.postcode, args.function)

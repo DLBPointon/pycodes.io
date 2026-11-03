@@ -46,20 +46,6 @@ class PostcodeObj:
         return txt.getvalue()
 
     def get_data(self):
-        return requests.get(
-            f"http://{self.base_url}{self.extension}{self.postcode}"
-        ).json()["result"]
-
-
-data = {
-    "nhs_ha": "East of England",
-    "european_electoral_region": "Eastern",
-    "primary_care_trust": "West Essex",
-    "lsoa": "Uttlesford 002C",
-    "msoa": "Uttlesford 002",
-    "date_of_introduction": "199507",
-    "ced": "Saffron Walden",
-    "ccg": "NHS Hertfordshire and West Essex",
-    "nuts": "Uttlesford",
-    "pfa": "Essex",
-}
+        return requests.get(f"http://{self.base_url}{self.extension}{self.postcode}").json()[
+            "result"
+        ]

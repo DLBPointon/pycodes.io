@@ -37,9 +37,7 @@ def parse_args():
         type=str,
         help="Postcode in format of PE122LN or PE12, depending on function you need.",
     )
-    parser.add_argument(
-        "--csv", type=Path, help="CSV formatted file C1=postcode, C2=other_data"
-    )
+    parser.add_argument("--csv", type=Path, help="CSV formatted file C1=postcode, C2=other_data")
     parser.add_argument(
         "--function",
         choices=["postcodes", "outcodes"],
@@ -68,19 +66,36 @@ def parse_args():
 def validate_postcode(postcode: str, function: str) -> str:
     """
     Very basic validation of the postcode format vs an outcode
+
+    Outcodes are the first UPTO 4 characters of a postcode
+    - Can be upto 3 Letters and 1 Digit or 2 Letters and 2 Digits
+
+    Postcodes are an Outcode + incode which is always 1 Digit and 2 Letters
+    - This means it is always 7 characters long and at least 3 Letters
+        and 2 Digits
     """
-    if function == "outcodes" and len(postcode) <= 4:
-        pass
-    elif function == "postcodes" and len(postcode) >= 4:
-        pass
-    else:
-        sys.exit("Postcode not correct for function")
+
+    string_count: int = sum(1 for x in postcode if x.isalpha())
+    digit_count: int = sum(1 for x in postcode if x.isdigit())
+    code_length: int = len(postcode.strip())
+
+    match function:
+        case "outcodes":
+            if code_length <= 4 and string_count >= 1 and digit_count >= 1:
+                pass
+        case "postcodes":
+            if code_length == 7 and string_count >= 3 and digit_count >= 2:
+                pass
+        case _:
+            sys.exit("Postcode not correct for function")
     return postcode
 
 
-def pull_lat_long(postcodeio: dict) -> tuple:
-    """Return only the lat and long from the dict"""
-    return postcodeio["latitude"], postcodeio["longitude"]
+def pull_lat_long(in_dict: dict) -> tuple:
+    """
+    Return only the lat and long from the postcodes dict
+    """
+    return in_dict["latitude"], in_dict["longitude"]
 
 
 def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
@@ -104,7 +119,6 @@ def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
 
 
 def output_data_to_csv(output_dict: dict):
-
     with open("output.csv", "w") as f:
         f.write("postcode,latitude,longitude,area\n")
         for postcode, data in output_dict.items():
@@ -115,9 +129,7 @@ def main():
     args = parse_args()
 
     if args.csv:
-        output_dict = run_and_collect_from_csv(
-            args.csv, args.function, args.postcodes_base_url
-        )
+        output_dict = run_and_collect_from_csv(args.csv, args.function, args.postcodes_base_url)
 
         if not args.dry_run:
             output_data_to_csv(output_dict)

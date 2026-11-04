@@ -66,7 +66,7 @@ def pull_lat_long(postcodeio: dict) -> tuple:
 def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
     output_dict = {}
 
-    with open("/home/dlbpointon/Documents/pycodes.io/may26_output_V5.csv", "w") as f_out:
+    with open("/home/dlbpointon/Documents/pycodes.io/SOMERSET_june26_V6.csv", "w") as f_out:
         f_out.write("postcode,area,lsoa,icb,parish,admin_district,admin_ward,latitude,longitude\n")
 
         valid_counter = 0
@@ -85,7 +85,7 @@ def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
                 latitude, longitude = pull_lat_long(postcodeio.lat_long)
                 if postcodeio.admin_district in  ["Somerset", "North Somerset", "South Somerset"]:
                     valid_counter += 1
-                    new_line = f'{postcode},{area},{postcodeio.lsoa},"{postcodeio.icb}",{postcodeio.parish},"{postcodeio.admin_district}","{postcodeio.admin_ward}",{latitude},{longitude}\n'
+                    new_line = f'{postcode},"{area}",{postcodeio.lsoa},"{postcodeio.icb}","{postcodeio.parish}","{postcodeio.admin_district}","{postcodeio.admin_ward}",{latitude},{longitude}\n'
                     print(new_line)
                     f_out.write(new_line)
                 else:

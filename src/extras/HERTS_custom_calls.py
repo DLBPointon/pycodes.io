@@ -1,11 +1,8 @@
 import argparse
-from importlib import invalidate_caches
 import sys
 import textwrap
 from pathlib import Path
 
-from pycodes_io.Compare import ComparisonObj
-from pycodes_io.Doogal import DoogalObj
 from pycodes_io.Postcode import PostcodeObj
 
 DESCRIPTION = """
@@ -66,7 +63,7 @@ def pull_lat_long(postcodeio: dict) -> tuple:
 def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
     output_dict = {}
 
-    with open("/home/dlbpointon/Documents/pycodes.io/HERTS_june26_V2.csv", "w") as f_out:
+    with open("/home/dlbpointon/Documents/pycodes.io/HERTS_june26_V3.csv", "w") as f_out:
         f_out.write("postcode,area,lsoa,icb,parish,admin_district,admin_ward,latitude,longitude\n")
 
         with csv_path.open() as f:
@@ -85,7 +82,7 @@ def run_and_collect_from_csv(csv_path: Path, function: str, base_url: str):
                     postcodeio = PostcodeObj(code, function, base_url)
 
                     latitude, longitude = pull_lat_long(postcodeio.lat_long)
-                    new_line = f'{postcode},{pcn},{postcodeio.lsoa},"{postcodeio.icb}",{postcodeio.parish},"{postcodeio.admin_district}","{postcodeio.admin_ward}",{latitude},{longitude}\n'
+                    new_line = f'{postcode},"{pcn}",{postcodeio.lsoa},"{postcodeio.icb}","{postcodeio.parish}","{postcodeio.admin_district}","{postcodeio.admin_ward}",{latitude},{longitude}\n'
                     print(new_line)
                     f_out.write(new_line)
 
